@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Chat Example</title>
+<script type="text/javascript">
+window.onload = function () {
+    var conn;
+    var user = document.getElementById("user");
+
+    document.getElementById("userform").onsubmit = function () {
+        if (!conn) {
+            return false;
+        }
+        if (!user.value) {
+            return false;
+        }
+        conn.send(user.value);
+        return false;
+    };
+
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://" + document.location.host + "/ws");
+        conn.onclose = function (evt) {
+            var item = document.createElement("div");
+            item.innerHTML = "<b>Connection closed.</b>";
+            appendLog(item);
+        };
+        conn.onmessage = function (evt) {
+            var messages = evt.data.split('\n');
+            for (var i = 0; i < messages.length; i++) {
+                var item = document.createElement("div");
+                item.innerText = messages[i];
+                appendLog(item);
+            }
+        };
+    } else {
+        var item = document.createElement("div");
+        item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+        appendLog(item);
+    }
+};
+</script>
+</head>
+<body>
+<form id="userform" style="z-index: 100;position: absolute; right: 20px; bottom: 15px;" >
+    <input type="submit" value="Enter" />
+    <input type="text" id="user" size="64">
+</form>
+</body>
+</html>

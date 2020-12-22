@@ -12,7 +12,7 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-func serveHome(w http.ResponseWriter, r *http.Request) {
+func serveLogin(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
 	if r.URL.Path != "/" {
 		http.Error(w, "Not found", http.StatusNotFound)
@@ -22,14 +22,15 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	http.ServeFile(w, r, "home.html")
+	http.ServeFile(w, r, "login.html")
 }
 
 func main() {
 	flag.Parse()
+	// connect()
 	hub := newHub()
 	go hub.run()
-	http.HandleFunc("/", serveHome)
+	http.HandleFunc("/", serveLogin)
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})
