@@ -8,6 +8,8 @@ import (
 	"flag"
 	"log"
 	"net/http"
+
+	_ "github.com/dgrijalva/jwt-go"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
@@ -27,9 +29,15 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	flag.Parse()
-	hub := newHub()
+	hub := newHub("default")
+	//Create the default world
+	defaultWorld := newWorld("Rivendel", "largePlains")
+	go defaultWorld.run()
+	//Creating resource engine
+	newResourceEngine := newResourceEngine()
+	go newResourceEngine.run()
 	go hub.run()
-	http.HandleFunc("/", serveHome)
+	go http.HandleFunc("/", serveHome)
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})
