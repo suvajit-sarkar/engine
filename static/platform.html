@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Game Worlds</title>
+<script type="text/javascript">
+window.onload = function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange=function() {
+    if (this.readyState == 4 && this.status == 201) {
+      var data = JSON.parse(this.responseText);
+      var worldlistElement = document.getElementById("world_list");
+      for (var i = 0; i < data.list.length; i++) {
+                var item = document.createElement("li");
+                item.innerText = data.list[i];
+                worldlistElement.appendChild(item);
+            } 
+      document.getElementById("world_list").appendChild()
+    }
+    else{
+        console.log("unsuccessful");
+    }
+  };
+  xhttp.open("GET", "/worldlist", true);
+  xhttp.send();
+};
+</script>
+<style type="text/css">
+html {
+    overflow: hidden;
+}
+
+body {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: gray;
+}
+
+</style>
+</head>
+<body>
+<div>
+  <ul id="world_list"></ul>
+</div>
+</form>
+</body>
+</html>

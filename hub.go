@@ -18,18 +18,14 @@ type Hub struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
-
-	// Room name
-	room string
 }
 
-func newHub(roomName string) *Hub {
+func newHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		clients:    make(map[*Client]bool),
-		room:       roomName,
 	}
 }
 
